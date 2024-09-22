@@ -14,26 +14,28 @@ const Navbar = () => {
 
   useEffect(() => {
     // Function to handle scrolling to the section
-    const handleScrollToSection = (e) => {
+    const handleScrollToSection = (e: MouseEvent) => {
       e.preventDefault();
-      const targetId = e.target.getAttribute('href').substring(1);
-      const targetElement = document.getElementById(targetId);
-
-      if (targetElement) {
-        targetElement.scrollIntoView({ behavior: 'smooth' });
+      const target = e.target as HTMLAnchorElement;
+      const targetId = target.getAttribute('href')?.substring(1);
+      if (targetId) {
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
       }
     };
 
     // Attach click event listeners to all links with the class 'scroll-link'
     const scrollLinks = document.querySelectorAll('.scroll-link');
     scrollLinks.forEach((link) => {
-      link.addEventListener('click', handleScrollToSection);
+      link.addEventListener('click', handleScrollToSection as EventListener);
     });
 
     // Clean up event listeners on component unmount
     return () => {
       scrollLinks.forEach((link) => {
-        link.removeEventListener('click', handleScrollToSection);
+        link.removeEventListener('click', handleScrollToSection as EventListener);
       });
     };
   }, []);
@@ -41,9 +43,11 @@ const Navbar = () => {
   const handleMenu = () => {
     changeOpened();
   };
+
   const openMenu = () => {
     setActiveMenu(!isActiveMenu);
   };
+  
   return (
     <motion.nav
       className="px-6 xl:container md:w-full mx-auto py-2 sticky top-0 backdrop-blur-lg z-50"
